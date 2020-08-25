@@ -3,7 +3,7 @@
 
 ```bash
 git status
-git commit -a -m "Mejora en el mensaje de bienvenida"
+git commit -a -m "default messsage"
 git push
 ```
 
@@ -13,6 +13,31 @@ git push
 Construir una aplicación de línea de comando que permita calcular los datos de facturación incluyendo impuestos y descuentos.
 Debe poder ejecutarse con la línea de comando:
 $ ruby factura.rb <cantidad> <precio unitario> <estado>
+
+IMPUESTOS (Estado, Tasa % )
+```bash
+impuestos={ "UT"=> 6.85,  "NV"=> 8.0,  "TX"=> 6.25,  "AL"=> 4.00,  "CA"=> 8.25 }
+
+HOW-TO
+impuestos["CA"]
+```
+
+DESCUENTOS (Mas de,  % )
+```bash
+descuentos
+Mas de $1000 :: 3%
+Mas de $5000 :: 5%
+Mas de $7000 :: 7%
+Mas de $10000 :: 10%
+Mas de $50000 :: 15%
+descuentos={ 1000=> 3, 5000=>5, 7000=>7, 10000=>10, 50000=>15 }
+
+HOW-TO
+descuentos.select{|v| v >= 50}.length
+descuentos.select{|v| v >= 1500}.length
+
+```
+
 
 ## Ejemplo
 ```bash
