@@ -38,12 +38,23 @@ class Factura
     end
 
 
+    def calculateTaxes( pSubtotal, state )
+        taxes = { "percentage"=>0, "money"=>0 }
+        if !@impuestos[state].nil?
+            imp_state = @impuestos[state]
+            imp_percent = (pSubtotal * taxes["percentage"] /100).to_f
+            taxes = { "percentage"=>imp_state, "money"=> imp_percent }
+        end
+        return taxes
+    end
+
+
     def formatedData()
 
         subtotal = @unit * @price
-
-        taxes_percentage = @impuestos[@state]
-        taxes_money = subtotal*taxes_percentage /100
+        taxes_object = calculateTaxes(  subtotal, @state  )
+        taxes_percentage = taxes_object["percentage"]
+        taxes_money =  taxes_object["money"]
 
         discount_object = calculateDiscount( subtotal )
         discount_percentage = discount_object["discount"]
