@@ -6,10 +6,10 @@ class Factura
         price=0 if price==nil
         state="CA" if state==nil
 
-        if ARGV.length < 2 || unit < 1 || price < 1
-            raise "######## ERROR: missing parameter ######## \n \n $ ruby factura.rb <unit> <price> [state=CA]\n\n"
-            return
-        end
+       # if  unit < 1 || price < 1
+       #     raise "######## ERROR: missing parameter ######## \n \n $ ruby factura.rb <unit> <price> [state=CA]\n\n"
+       #     return
+       # end
 
         @unit=unit
         @price=price
@@ -31,8 +31,9 @@ class Factura
         @descuentos.each do |hash| 
             # DEBUG :::: puts pSubtotal.to_s + " > " + hash["more_than"].to_s
             if pSubtotal > hash["more_than"]
-                money  = (pSubtotal * taxes["more_than"] /100).to_f
-                # DEBUG :::: puts "calcular discount, money = #{money}"
+                money  = (pSubtotal * hash["discount"] /100)
+                # DEBUG :::: 
+                puts "calcular discount, pSubtotal = #{pSubtotal} money = #{money}"
                 hash["money"] = money
               return hash
             end 
@@ -45,9 +46,8 @@ class Factura
         taxes = { "percentage"=>0, "money"=>0 }
         if !@impuestos[state].nil?
             imp_state = @impuestos[state]
-            imp_percent = (pSubtotal * imp_state /100).to_f
-            puts imp_state
-            taxes = { "percentage"=>imp_state, "money"=> imp_percent }
+            money = (pSubtotal * imp_state /100).to_f
+            taxes = { "percentage"=>imp_state, "money"=> money }
         end
         return taxes
     end
@@ -65,8 +65,8 @@ class Factura
         discount_more_than = discount_object["more_than"]
 
         # DEBUG :::: 
-        puts "discount taxes_object =  #{taxes_percentage} // #{taxes_money}"
-        puts "discount Object =  #{discount_percentage} // #{discount_more_than}"
+         # DEBUG :::: puts "discount taxes_object =  #{taxes_percentage} // #{taxes_money}"
+         # DEBUG :::: puts "discount Object =  #{discount_percentage} // #{discount_more_than}"
 
         discount_money = subtotal*discount_percentage /100
 
@@ -75,13 +75,14 @@ class Factura
 "       ------------------------
         #{@unit} * $#{@price} = $#{subtotal}
         #{@state}(%#{taxes_percentage}) = $#{taxes_money}
-        DTO(%#{discount_percentage}) = $#{discount_more_than}
+        DTO(%#{discount_percentage}) = $#{discount_money}
         Total = $#{total}"
     end 
 
 end
 
 
-myFactura = Factura.new(ARGV[0].to_i, ARGV[1].to_i, ARGV[2])
+myFactura = Factura.new( ARGV[0].to_i, ARGV[1].to_i, ARGV[2]) 
 puts myFactura.formatedData()
 
+# ruby factura.rb 1 50 CA
