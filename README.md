@@ -17,9 +17,6 @@ $ ruby factura.rb <cantidad> <precio unitario> <estado>
 IMPUESTOS (Estado, Tasa % )
 ```bash
 impuestos={ "UT"=> 6.85,  "NV"=> 8.0,  "TX"=> 6.25,  "AL"=> 4.00,  "CA"=> 8.25 }
-
-HOW-TO
-impuestos["CA"]
 ```
 
 DESCUENTOS (Mas de,  % )
@@ -31,10 +28,6 @@ Mas de $7000 :: 7%
 Mas de $10000 :: 10%
 Mas de $50000 :: 15%
 descuentos={ 1000=> 3, 5000=>5, 7000=>7, 10000=>10, 50000=>15 }
-
-HOW-TO
-descuentos.select{|v| v >= 50}.length
-descuentos.select{|v| v >= 1500}.length
 
 ```
 
