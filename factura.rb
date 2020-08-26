@@ -27,14 +27,17 @@ class Factura
     end
 
 
-    def calculateDiscount(subtotal)
+    def calculateDiscount(pSubtotal)
         @descuentos.each do |hash| 
-            # DEBUG :::: puts subtotal.to_s + " > " + hash["more_than"].to_s
-            if subtotal > hash["more_than"]
+            # DEBUG :::: puts pSubtotal.to_s + " > " + hash["more_than"].to_s
+            if pSubtotal > hash["more_than"]
+                money  = (pSubtotal * taxes["more_than"] /100).to_f
+                # DEBUG :::: puts "calcular discount, money = #{money}"
+                hash["money"] = money
               return hash
             end 
         end 
-        return { "more_than"=> 0, "discount"=> 0 }
+        return { "more_than"=> 0, "discount"=> 0, "money"=>0 }
     end
 
 
@@ -42,7 +45,8 @@ class Factura
         taxes = { "percentage"=>0, "money"=>0 }
         if !@impuestos[state].nil?
             imp_state = @impuestos[state]
-            imp_percent = (pSubtotal * taxes["percentage"] /100).to_f
+            imp_percent = (pSubtotal * imp_state /100).to_f
+            puts imp_state
             taxes = { "percentage"=>imp_state, "money"=> imp_percent }
         end
         return taxes
@@ -60,7 +64,9 @@ class Factura
         discount_percentage = discount_object["discount"]
         discount_more_than = discount_object["more_than"]
 
-        # DEBUG :::: puts "discount Object =  #{discount_percentage} // #{discount_more_than}"
+        # DEBUG :::: 
+        puts "discount taxes_object =  #{taxes_percentage} // #{taxes_money}"
+        puts "discount Object =  #{discount_percentage} // #{discount_more_than}"
 
         discount_money = subtotal*discount_percentage /100
 
@@ -69,7 +75,7 @@ class Factura
 "       ------------------------
         #{@unit} * $#{@price} = $#{subtotal}
         #{@state}(%#{taxes_percentage}) = $#{taxes_money}
-        DTO(%#{discount_percentage}) = $#{discount_money}
+        DTO(%#{discount_percentage}) = $#{discount_more_than}
         Total = $#{total}"
     end 
 
